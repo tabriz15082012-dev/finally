@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <title>Мой город</title>
+</head>
+
+<body>
+
+    <div class="box">
+        <div class="block"></div>
+    <h1 class="me_application">ʍой ᴦоᴩод</h1>
+    <div class="buton">
+        <button id="busBtn">автобусы</button>
+        <button>пробки</button>
+        <button>профиль</button>
+    </div>
+    
+    <!-- 🪟 окно -->
+    <div id="busWindow" class="bus-window">
+        <button>Автобус-51</button>
+        <button>Автобус-9</button>
+        <button>Автобус-226</button>
+        <button>Автобус-215</button>
+    </div>
+    
+    </div>
+    
+    <input type="checkbox" id="toggle" style="display:none;">
+
+<!-- кнопка -->
+<label for="toggle">
+  <button>профиль</button>
+</label>
+
+<!-- окно -->
+<div id="modal">
+  <div class="modal-content">
+    <label for="toggle" style="cursor:pointer;">✖ закрыть</label>
+    <p>Это окошко</p>
+  </div>
+</div>
+
+    <body>
+
+        
+        
+        <div id="map"></div>
+        
+        <script src="script.js"></script>
+        </body>
+
+    
+        <div id="map" style="height: 400px;"></div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+const map = L.map('map').setView([42.87, 74.60], 12);
+
+// слой карты
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+  .addTo(map);
+
+// сюда будем складывать маркеры автобусов
+let markers = {};
+
+// функция обновления (берём данные с API)
+async function updateBuses() {
+    const res = await fetch('URL_С_API_АВТОБУСОВ'); // <-- сюда реальный API
+    const data = await res.json();
+
+    data.buses.forEach(bus => {
+        const id = bus.id;
+        const lat = bus.lat;
+        const lon = bus.lon;
+
+        if (!markers[id]) {
+            markers[id] = L.marker([lat, lon]).addTo(map);
+        } else {
+            markers[id].setLatLng([lat, lon]);
+        }
+    });
+}
+
+// обновляем каждые 5 секунд
+setInterval(updateBuses, 5000);
+</script>
+
+</body>
+</html>
